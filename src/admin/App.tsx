@@ -1,15 +1,25 @@
-// in src/admin/App.jsx
-import * as React from "react";
-import { Admin, Resource, ListGuesser } from "react-admin";
-import jsonServerProvider from "ra-data-json-server";
+import React, { useEffect, useState } from "react";
+import { Admin, Resource, DataProvider } from "react-admin";
+import { useApolloClient } from "@apollo/react-hooks";
+import pgDataProvider from "ra-postgraphile";
 
-const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");
+import { PostList, PostEdit, PostCreate } from "@/components/posts";
 
-const App = () => (
-  <Admin dataProvider={dataProvider}>
-    <Resource name="posts" list={ListGuesser} />
-    <Resource name="comments" list={ListGuesser} />
-  </Admin>
-);
+const App = () => {
+  const [dataProvider, setDataProvider] = useState<DataProvider | null>(null);
+  const client = useApolloClient();
+
+  useEffect(() => {
+    pgDataProvider(client).then((dp) => setDataProvider(dp));
+  }, []);
+
+  return (
+    dataProvider && (
+      <Admin dataProvider={dataProvider}>
+        <Resource name="Posts" list={PostList} edit={PostEdit} create={PostCreate} />
+      </Admin>
+    )
+  );
+};
 
 export default App;
