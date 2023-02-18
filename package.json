@@ -4,10 +4,12 @@
   "author": "leowyatt",
   "license": "MIT",
   "scripts": {
-    "dev": "next dev",
+    "develop": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev": "yarn pm2 startOrRestart ecosystem.config.js --only rapg-dev",
+    "prod": "yarn pm2 startOrRestart ecosystem.config.js --only rapg-prod"
   },
   "dependencies": {
     "@apollo/client": "^3.7.7",
@@ -29,5 +31,8 @@
     "react-client-only": "^1.0.2",
     "react-dom": "18.2.0",
     "typescript": "4.9.5"
+  },
+  "devDependencies": {
+    "pm2": "^5.2.2"
   }
 }
